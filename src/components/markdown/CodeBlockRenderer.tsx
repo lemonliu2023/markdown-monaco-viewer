@@ -38,7 +38,7 @@ const CodeBlockRendererImpl = ({ node, className, children }: CodeBlockProps) =>
   // 使用 MonacoEditor 渲染代码块 - 使用 Tailwind 类
   return (
     <div
-      className="mt-4 mb-4 border rounded-lg overflow-hidden"
+      className="mt-4 mb-4 border rounded-lg"
       style={{
         borderColor: 'var(--border-color)',
       }}
