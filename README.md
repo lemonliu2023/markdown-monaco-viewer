@@ -15,12 +15,71 @@
 - ⚡ **高性能渲染** - React 19 编译器优化 + 智能组件缓存
 - 🔤 **20+ 语言支持** - TypeScript、Python、Go、Java、C++、SQL 等
 
+## 与其他项目的区别
+
+### vs. 普通 Markdown 渲染器（marked、markdown-it）
+
+| 特性 | 本项目 | 普通渲染器 |
+|------|--------|----------|
+| 代码块渲染 | Monaco Editor（IDE 级） | HTML `<pre><code>` |
+| 语法高亮 | 完整的 IDE 级别 | 基础的 Prism/Highlight.js |
+| 交互性 | 代码块可交互（行号、折叠） | 只读展示 |
+| 文件大小 | 较大（Monaco 库） | 很小 |
+| 使用场景 | 代码文档、技术博客 | 简单内容展示 |
+
+### vs. 在线 Markdown 编辑器（Notion、Obsidian）
+
+| 特性 | 本项目 | 在线编辑器 |
+|------|--------|----------|
+| 定位 | 查看器 | 编辑器 |
+| 功能 | 专注代码高亮 | 全功能编辑 |
+| 部署 | 轻量级 Web 应用 | 复杂的云服务 |
+| 学习成本 | 低 | 高 |
+| 定制性 | 高（开源） | 低（闭源） |
+
+### vs. 代码高亮库（Highlight.js、Prism）
+
+| 特性 | 本项目 | 高亮库 |
+|------|--------|--------|
+| 功能 | 完整的 Markdown 查看器 | 仅代码高亮 |
+| 代码块体验 | IDE 级别（行号、折叠等） | 基础高亮 |
+| 交互性 | 丰富 | 无 |
+| 集成难度 | 开箱即用 | 需要自己集成 |
+
+## 技术亮点
+
+### 1. 自定义代码块渲染器
+通过 Streamdown 的 `components` 配置，完全控制代码块渲染方式，而不被 Markdown 库限制：
+
+```typescript
+<Streamdown
+  components={{
+    code: CodeBlockRenderer,  // 自定义渲染逻辑
+  }}
+>
+  {content}
+</Streamdown>
+```
+
+### 2. 行内代码 vs 代码块智能区分
+通过 AST 节点位置判断，行内代码用轻量级渲染，代码块用 Monaco Editor，性能最优：
+
+```typescript
+const isInline = node?.position?.start.line === node?.position?.end.line;
+```
+
+### 3. 主题系统设计
+使用 CSS 变量 + React Context，实现全局主题切换和 Monaco Editor 主题联动，易于扩展新主题。
+
+### 4. 全屏拖拽交互
+全局事件监听支持从任意位置拖拽文件到应用，提供流畅的用户体验。
+
 ## 技术栈
 
-- **React 19** - 现代化的 UI 框架
+- **React 19** - 现代化的 UI 框架，集成编译器优化
 - **TypeScript** - 类型安全的开发体验
 - **Vite** - 快速的构建工具
-- **Monaco Editor** - 专业级代码编辑器
+- **Monaco Editor** - 专业级代码编辑器（VS Code 引擎）
 - **Streamdown** - Markdown 渲染引擎
 - **Tailwind CSS** - 实用优先的 CSS 框架
 
@@ -89,3 +148,18 @@ src/
 - HTML
 - SQL
 - 以及 Monaco Editor 支持的其他语言
+
+## 适用场景
+
+✅ **适合用这个项目的场景：**
+- 技术文档展示平台
+- 代码片段分享工具
+- 学习资源库
+- 博客系统（重点展示代码）
+- API 文档查看器
+- 代码教程平台
+
+❌ **不适合的场景：**
+- 需要编辑功能的应用
+- 简单的内容展示
+- 对包体积要求极高的项目
