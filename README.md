@@ -1,15 +1,19 @@
 # Markdown Monaco Editor
 
-一个功能强大的 Markdown 查看器，集成 Monaco Editor 提供专业级代码高亮和编辑体验。
+一个专注于代码展示体验的 Markdown 查看器，集成 Monaco Editor（VS Code 编辑器引擎）提供专业级代码高亮。
 
-## 功能特性
+## 项目定位
+
+这不是一个通用的 Markdown 编辑器，而是一个 **专注于代码展示体验** 的工具。通过集成 Monaco Editor，它提供了远超普通 Markdown 渲染器的代码阅读体验，同时保持轻量级和易用性。
+
+## 核心特色
 
 - 📁 **文件上传** - 支持上传 `.md`、`.markdown`、`.mdx`、`.txt` 格式文件
-- 🎨 **代码高亮** - 使用 Monaco Editor 渲染代码块，支持多种编程语言
-- 🌙 **主题切换** - 自动适配系统主题，支持浅色/深色模式切换
-- 🖱️ **全屏拖拽** - 支持全屏拖拽上传 Markdown 文件
-- ⚡ **高性能渲染** - 基于 React 19 和 Vite，提供快速的开发体验
-- 🔤 **多语言支持** - 支持 TypeScript、JavaScript、Python、Go、CSS、JSON 等多种语言
+- 🎨 **IDE 级代码高亮** - 使用 Monaco Editor 渲染代码块，提供行号、代码折叠等功能
+- 🌙 **主题切换** - 深色/浅色主题实时切换，Monaco Editor 主题联动
+- 🖱️ **全屏拖拽** - 支持从任意位置拖拽文件到应用
+- ⚡ **高性能渲染** - React 19 编译器优化 + 智能组件缓存
+- 🔤 **20+ 语言支持** - TypeScript、Python、Go、Java、C++、SQL 等
 
 ## 技术栈
 
