@@ -1,75 +1,87 @@
-# React + TypeScript + Vite
+# Markdown Monaco Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个功能强大的 Markdown 查看器，集成 Monaco Editor 提供专业级代码高亮和编辑体验。
 
-Currently, two official plugins are available:
+## 功能特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📁 **文件上传** - 支持上传 `.md`、`.markdown`、`.mdx`、`.txt` 格式文件
+- 🎨 **代码高亮** - 使用 Monaco Editor 渲染代码块，支持多种编程语言
+- 🌙 **主题切换** - 自动适配系统主题，支持浅色/深色模式切换
+- 🖱️ **全屏拖拽** - 支持全屏拖拽上传 Markdown 文件
+- ⚡ **高性能渲染** - 基于 React 19 和 Vite，提供快速的开发体验
+- 🔤 **多语言支持** - 支持 TypeScript、JavaScript、Python、Go、CSS、JSON 等多种语言
 
-## React Compiler
+## 技术栈
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **React 19** - 现代化的 UI 框架
+- **TypeScript** - 类型安全的开发体验
+- **Vite** - 快速的构建工具
+- **Monaco Editor** - 专业级代码编辑器
+- **Streamdown** - Markdown 渲染引擎
+- **Tailwind CSS** - 实用优先的 CSS 框架
 
-Note: This will impact Vite dev & build performances.
+## 快速开始
 
-## Expanding the ESLint configuration
+### 安装依赖
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 开发模式
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+### 构建生产版本
+
+```bash
+pnpm build
+```
+
+### 预览构建结果
+
+```bash
+pnpm preview
+```
+
+## 使用方式
+
+1. 打开应用后，可以看到默认的 Markdown 示例
+2. 点击"上传 Markdown 文件"按钮选择文件，或直接拖拽文件到页面
+3. 代码块会自动使用 Monaco Editor 渲染，提供语法高亮
+4. 点击右上角按钮切换浅色/深色主题
+
+## 项目结构
+
+```
+src/
+├── components/
+│   └── markdown/
+│       ├── CodeBlockRenderer.tsx    # 代码块渲染器
+│       ├── FileUploader.tsx          # 文件上传组件
+│       └── MarkdownViewer.tsx        # Markdown 查看器
+├── contexts/
+│   ├── MonacoContext.tsx             # Monaco 编辑器上下文
+│   └── ThemeContext.tsx              # 主题上下文
+├── hooks/
+│   └── useSystemTheme.ts             # 系统主题检测
+├── types/
+│   └── markdown.ts                   # TypeScript 类型定义
+├── utils/
+│   └── languageDetection.ts          # 语言检测工具
+├── App.tsx                           # 主应用组件
+└── main.tsx                          # 应用入口
+```
+
+## 代码块支持的语言
+
+- TypeScript / JavaScript
+- Python
+- Go
+- CSS / SCSS
+- JSON
+- HTML
+- SQL
+- 以及 Monaco Editor 支持的其他语言
