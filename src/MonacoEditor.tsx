@@ -47,8 +47,8 @@ export function MonacoEditor({
       fontSize: 13,
       lineHeight: 20,
       padding: { top: 8, bottom: 8 },
-      readOnly: true,
-      domReadOnly: true,
+      // readOnly: true,
+      // domReadOnly: true,
       disableLayerHinting: true,
       // scrollBeyondLastLine: false,
       scrollbar: {

@@ -285,18 +285,46 @@ function App() {
     [handleFileLoad]
   );
 
+  // 检查拖拽的是否为真实文件
+  const checkIsFileDrag = useCallback((dataTransfer: DataTransfer | null): boolean => {
+    if (!dataTransfer) return false;
+
+    // 检查 types 数组,看是否包含 'Files' 类型
+    const hasFiles = dataTransfer.types.includes('Files');
+    const hasFilesMime = Array.from(dataTransfer.types).some(type =>
+      type.toLowerCase() === 'files'
+    );
+
+    console.log('🔍 Drag type detection:', {
+      types: Array.from(dataTransfer.types),
+      hasFiles,
+      hasFilesMime,
+      isFileDrag: hasFiles || hasFilesMime,
+    });
+
+    return hasFiles || hasFilesMime;
+  }, []);
+
   // 全屏拖拽事件处理
   useEffect(() => {
     const handleDragOver = (e: DragEvent) => {
+      // 检查是否为真实文件拖拽
+      const isFile = checkIsFileDrag(e.dataTransfer);
+
+      console.log(`🎯 DRAG OVER - Type: ${isFile ? 'FILE' : 'TEXT/PATH'}`);
+
       e.preventDefault();
       e.stopPropagation();
-      setIsDragging(true);
+
+      // 只有真实文件拖拽才显示蒙层
+      if (isFile) {
+        setIsDragging(true);
+      }
     };
 
     const handleDragLeave = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      // 只在离开整个窗口时隐藏遮罩
       if (e.relatedTarget === null) {
         setIsDragging(false);
       }
@@ -306,6 +334,13 @@ function App() {
       e.preventDefault();
       e.stopPropagation();
       setIsDragging(false);
+
+      // 只处理真实文件拖拽
+      const isFile = checkIsFileDrag(e.dataTransfer);
+      if (!isFile) {
+        console.log('⚠️ Not a file drag (likely VSCode), ignoring drop');
+        return;
+      }
 
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
@@ -331,7 +366,7 @@ function App() {
       document.removeEventListener('dragleave', handleDragLeave);
       document.removeEventListener('drop', handleDrop);
     };
-  }, [processFile]);
+  }, [processFile, checkIsFileDrag]);
 
   return (
     <ThemeContext.Provider value={{ theme, monacoTheme, toggleTheme }}>
@@ -339,6 +374,37 @@ function App() {
         {isDragging && (
           <div
             className="fullscreen-drag-overlay"
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (e.relatedTarget === null) {
+                setIsDragging(false);
+              }
+            }}
+            onDrop={(e) => {
+              console.log('🎯 Overlay DROP triggered');
+              e.preventDefault();
+              e.stopPropagation();
+              setIsDragging(false);
+
+              const files = e.dataTransfer?.files;
+              if (files && files.length > 0) {
+                const file = files[0];
+                const validExtensions = ['.md', '.markdown', '.mdx', '.txt'];
+                const hasValidExtension = validExtensions.some((ext) => file.name.toLowerCase().endsWith(ext));
+
+                if (hasValidExtension || file.type === 'text/markdown' || file.type === 'text/plain') {
+                  console.log('✅ Processing file from overlay drop');
+                  processFile(file);
+                } else {
+                  console.warn('Invalid file type:', file.name);
+                }
+              }
+            }}
             style={{
               position: 'fixed',
               top: 0,
@@ -403,7 +469,7 @@ function App() {
         {/* 固定定位的主题切换按钮 - 使用 Tailwind CSS v4 */}
         <button
           onClick={toggleTheme}
-          className="fixed top-5 right-5 z-[1000] px-4 py-2.5 border rounded-lg cursor-pointer text-sm flex items-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px"
+          className="fixed top-5 right-5 z-1000 px-4 py-2.5 border rounded-lg cursor-pointer text-sm flex items-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-px"
           style={{
             backgroundColor: 'var(--bg-secondary)',
             color: 'var(--text-primary)',
