@@ -2,14 +2,13 @@ import { memo, useCallback, useState, useRef, useEffect } from 'react';
 
 interface TextPasteInputProps {
   onTextLoad: (content: string) => void;
-  isFullPageDragging?: boolean;
 }
 
 /**
  * 文本输入组件
  * 支持直接粘贴或输入 Markdown 文本
  */
-const TextPasteInputImpl = ({ onTextLoad, isFullPageDragging }: TextPasteInputProps) => {
+const TextPasteInputImpl = ({ onTextLoad }: TextPasteInputProps) => {
   const [text, setText] = useState('');
   const [charCount, setCharCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
