@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MarkdownViewer } from './components/markdown/MarkdownViewer';
 import { FileUploader } from './components/markdown/FileUploader';
+import { TextPasteInput } from './components/markdown/TextPasteInput';
+import { InputModeSwitcher } from './components/markdown/InputModeSwitcher';
 import { ThemeContext } from './contexts/ThemeContext';
 import './App.css';
 
@@ -401,6 +403,7 @@ func main() {
 function App() {
   const [markdownContent, setMarkdownContent] = useState(DEFAULT_MARKDOWN);
   const [isDragging, setIsDragging] = useState(false);
+  const [inputMode, setInputMode] = useState<'file' | 'text'>('file');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     // ✅ 默认使用深色主题
     return 'dark';
@@ -633,7 +636,13 @@ function App() {
           {theme === 'dark' ? '☀️ 浅色' : '🌙 深色'}
         </button>
 
-        <FileUploader onFileLoad={handleFileLoad} isFullPageDragging={isDragging} />
+        <InputModeSwitcher currentMode={inputMode} onModeChange={setInputMode} />
+
+        {inputMode === 'file' ? (
+          <FileUploader onFileLoad={handleFileLoad} isFullPageDragging={isDragging} />
+        ) : (
+          <TextPasteInput onTextLoad={handleFileLoad} />
+        )}
 
         <main className="markdown-wrapper">
           <MarkdownViewer content={markdownContent} />

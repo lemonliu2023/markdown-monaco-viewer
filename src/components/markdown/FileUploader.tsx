@@ -108,7 +108,7 @@ const FileUploaderImpl = ({ onFileLoad, accept = '.md,.markdown,.mdx,.txt', isFu
         <input type="file" accept={accept} onChange={handleFileChange} style={{ display: 'none' }} />
       </label>
       <span style={{ color: '#9ca3af', fontSize: '14px' }}>
-        {isDragging ? '释放文件以上传' : '支持拖拽或点击上传 · .md, .markdown, .mdx, .txt'}
+        {localIsDragging ? '释放文件以上传' : '支持拖拽或点击上传 · .md, .markdown, .mdx, .txt'}
       </span>
     </div>
   );
