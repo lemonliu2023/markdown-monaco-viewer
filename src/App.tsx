@@ -3,6 +3,7 @@ import { MarkdownViewer } from './components/markdown/MarkdownViewer';
 import { FileUploader } from './components/markdown/FileUploader';
 import { TextPasteInput } from './components/markdown/TextPasteInput';
 import { InputModeSwitcher } from './components/markdown/InputModeSwitcher';
+import { ScrollToTop } from './components/ScrollToTop';
 import { ThemeContext } from './contexts/ThemeContext';
 import './App.css';
 
@@ -647,6 +648,9 @@ function App() {
         <main className="markdown-wrapper">
           <MarkdownViewer content={markdownContent} />
         </main>
+
+        {/* 滚动到顶部按钮 */}
+        <ScrollToTop />
       </div>
     </ThemeContext.Provider>
   );
