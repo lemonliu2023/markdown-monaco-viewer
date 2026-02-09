@@ -2,8 +2,8 @@ import { memo, useCallback, useState } from 'react';
 import type { FileUploaderProps } from '../../types/markdown';
 
 /**
- * 文件上传组件
- * 支持拖拽上传和点击上传 .md, .markdown, .mdx, .txt 文件
+ * 文件上传和剪贴板粘贴组件
+ * 支持文件上传、拖拽上传和从剪贴板粘贴
  */
 const FileUploaderImpl = ({ onFileLoad, accept = '.md,.markdown,.mdx,.txt', isFullPageDragging }: FileUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -73,6 +73,17 @@ const FileUploaderImpl = ({ onFileLoad, accept = '.md,.markdown,.mdx,.txt', isFu
     [processFile]
   );
 
+  const handlePaste = useCallback(async () => {
+    try {
+      const clipboardText = await navigator.clipboard.readText();
+      if (clipboardText.trim()) {
+        onFileLoad(clipboardText);
+      }
+    } catch (err) {
+      console.error('Failed to read clipboard:', err);
+    }
+  }, [onFileLoad]);
+
   return (
     <div
       onDragOver={isFullPageDragging ? undefined : handleDragOver}
@@ -81,7 +92,7 @@ const FileUploaderImpl = ({ onFileLoad, accept = '.md,.markdown,.mdx,.txt', isFu
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
+        gap: '12px',
         padding: '16px',
         backgroundColor: localIsDragging ? 'var(--bg-hover)' : 'var(--bg-tertiary)',
         borderRadius: '8px',
@@ -99,16 +110,46 @@ const FileUploaderImpl = ({ onFileLoad, accept = '.md,.markdown,.mdx,.txt', isFu
             borderRadius: '4px',
             display: 'inline-block',
             transition: 'background-color 0.2s',
+            fontSize: '14px',
+            fontWeight: '500',
+            whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0062a3')}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#007acc')}
         >
-          上传 Markdown 文件
+          📁 上传文件
         </span>
         <input type="file" accept={accept} onChange={handleFileChange} style={{ display: 'none' }} />
       </label>
-      <span style={{ color: '#9ca3af', fontSize: '14px' }}>
-        {localIsDragging ? '释放文件以上传' : '支持拖拽或点击上传 · .md, .markdown, .mdx, .txt'}
+
+      <button
+        onClick={handlePaste}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: 'var(--bg-secondary)',
+          color: 'var(--text-primary)',
+          border: '1px solid var(--border-color)',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '14px',
+          fontWeight: '500',
+          transition: 'all 0.2s',
+          whiteSpace: 'nowrap',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+          e.currentTarget.style.borderColor = 'var(--accent-color)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+          e.currentTarget.style.borderColor = 'var(--border-color)';
+        }}
+      >
+        📋 从剪贴板粘贴
+      </button>
+
+      <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
+        {localIsDragging ? '释放文件以上传' : '支持拖拽或点击 · .md, .markdown, .mdx, .txt'}
       </span>
     </div>
   );
